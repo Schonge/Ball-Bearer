@@ -40,6 +40,10 @@ public class MenuResourceManager {
 	public VertexBufferObjectManager vbom;
 	public MenuActivity menuActivity;
 	
+	// Splash graphics
+	public BitmapTextureAtlas splashTextureAtlas;
+	public ITextureRegion splashTR;
+	
 	// Menu graphics
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	public BitmapTextureAtlas menuBackTexture;
@@ -50,6 +54,21 @@ public class MenuResourceManager {
 	//====================================================
 	// METHODS
 	//====================================================
+	
+	public void loadSplashResources() {
+		// Graphics
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.splashTextureAtlas = new BitmapTextureAtlas(menuActivity.getTextureManager(), 480, 800);
+		splashTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, menuActivity,
+				"splash_background.png", 0, 0);
+		splashTextureAtlas.load();
+		// Sounds
+	}
+	
+	public void unloadSplashResources() {
+		splashTextureAtlas.unload();
+		splashTR = null;
+	}
 	
 	public void loadMenuResources() {
 		// Graphics

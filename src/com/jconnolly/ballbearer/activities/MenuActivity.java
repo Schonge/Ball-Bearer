@@ -3,6 +3,8 @@ package com.jconnolly.ballbearer.activities;
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
@@ -54,12 +56,22 @@ public class MenuActivity extends BaseGameActivity {
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
-		SceneManager.getSceneMan().createMenu(pOnCreateSceneCallback);
+		SceneManager.getSceneMan().createSplashScreen(pOnCreateSceneCallback);
 	}
 
 	@Override
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
+		mEngine.registerUpdateHandler(new TimerHandler(5f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				MenuResourceManager.getMenuResMan().loadMenuResources();
+				SceneManager.getSceneMan().createMenu();
+				SceneManager.getSceneMan().disposeSplash();
+			}
+		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	

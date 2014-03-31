@@ -6,9 +6,11 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 import com.jconnolly.ballbearer.scenes.BaseScene;
 import com.jconnolly.ballbearer.scenes.MainMenuScene;
+import com.jconnolly.ballbearer.scenes.SplashScene;
 
 public class SceneManager {
 	
+	private BaseScene splashScene;
 	private BaseScene menuScene;
 	private BaseScene scoreScene;
 	private BaseScene optionsScene;
@@ -17,10 +19,11 @@ public class SceneManager {
 	private static final SceneManager SCENE_MAN = new SceneManager();
 	
 	private BaseScene currentScene;
-	private SceneType currentSceneType = SceneType.MENU_SCENE;
+	private SceneType currentSceneType = SceneType.SPLASH_SCENE;
 	private Engine engine = MenuResourceManager.getMenuResMan().engine;
 	
 	public enum SceneType {
+		SPLASH_SCENE,
 		MENU_SCENE,
 		SCORE_SCENE,
 		OPTIONS_SCENE,
@@ -32,12 +35,18 @@ public class SceneManager {
 	// METHODS
 	//====================================================
 	
-	public void createMenu(OnCreateSceneCallback pOnCreateSceneCallback) {
+	public void createSplashScreen(OnCreateSceneCallback pOnCreateSceneCallback) {
+		MenuResourceManager.getMenuResMan().loadSplashResources();
+		splashScene = new SplashScene();
+		currentScene = splashScene;
+		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+	}
+	
+	public void createMenu() {
 		MenuResourceManager.getMenuResMan().loadMenuResources();
 		menuScene = new MainMenuScene();
 		currentScene = menuScene;
 		setScene(menuScene);
-		pOnCreateSceneCallback.onCreateSceneFinished(menuScene);
 	}
 	
 	/*public void createLoading(OnCreateSceneCallback pOnCreateSceneCallback) {
@@ -67,6 +76,12 @@ public class SceneManager {
 		loadingScene.destroyScene();
 		loadingScene = null;
 	}*/
+	
+	public void disposeSplash() {
+		MenuResourceManager.getMenuResMan().unloadSplashResources();
+		splashScene.destroyScene();
+		splashScene = null;
+	}
 	
 	public void disposeMenu() {
 		MenuResourceManager.getMenuResMan().unloadMenuResources();
