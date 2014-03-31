@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Ball Bearer</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="powered">Powered By</string>
+    <string name="desCompLogo">Company Logo</string>
+    <string name="desAndEngineLogo">AndEngine Game Engine Logo</string>
+
+</resources>
