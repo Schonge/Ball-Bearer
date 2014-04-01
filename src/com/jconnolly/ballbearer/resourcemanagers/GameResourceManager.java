@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.jconnolly.ballbearer.activities.GameActivity;
+import com.jconnolly.ballbearer.tiles.TileManager;
 
 public class GameResourceManager {
 	
@@ -43,6 +44,9 @@ public class GameResourceManager {
 		public ITextureRegion ballTR;
 		public ITextureRegion finishTR;
 		
+		// Tile Manager
+		public TileManager tileManager;
+		
 		//====================================================
 		// METHODS
 		//====================================================
@@ -50,7 +54,7 @@ public class GameResourceManager {
 		public void loadLoadingResources() {
 			// Graphics
 			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-			this.loadingTextureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 480, 800);
+			this.loadingTextureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
 			loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, gameActivity,
 					"loadingText.png", 0, 0);
 			loadingTextureAtlas.load();
@@ -60,7 +64,7 @@ public class GameResourceManager {
 		public void loadGameResources() {
 			// Graphics
 			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-			this.gameTextureAtlas = new BuildableBitmapTextureAtlas(gameActivity.getTextureManager(), 800, 480);
+			this.gameTextureAtlas = new BuildableBitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
 			levelBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity,
 					"level_background2.png");
 			ballTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity, "redBall.png");
@@ -80,9 +84,19 @@ public class GameResourceManager {
 			// Sounds
 		}
 		
+		public void loadTileManager() {
+			loadGameResources();
+			tileManager = new TileManager(vbom);
+		}
+		
 		public void unloadLoadingResources() {
 			loadingTextureAtlas.unload();
 			loadingTR = null;
+		}
+		
+		public void unloadGameResources() {
+			gameTextureAtlas.unload();
+			gameTextureAtlas = null;
 		}
 		
 		public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, GameActivity gAct) {

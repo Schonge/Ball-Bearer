@@ -10,13 +10,11 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import com.jconnolly.ballbearer.GameScreenManager;
 import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
-import com.jconnolly.ballbearer.scenes.BaseScene;
-import com.jconnolly.ballbearer.scenes.GameScene;
 
 public class GameActivity extends BaseGameActivity {
 
@@ -24,9 +22,6 @@ public class GameActivity extends BaseGameActivity {
 	private static final int CAMERA_HEIGHT = 480;
 	
 	private Camera camera;
-	private Scene loadingScene;
-	private BaseScene level;
-	private Sprite loading;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -50,15 +45,15 @@ public class GameActivity extends BaseGameActivity {
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
 		GameResourceManager.prepareManager(getEngine(), this.camera, getVertexBufferObjectManager(), this);
-		GameResourceManager.getGameResMan().loadLoadingResources();
+		GameResourceManager.getGameResMan();
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
-		createLoadingScreen();
-		pOnCreateSceneCallback.onCreateSceneFinished(this.loadingScene);
+		MenuResourceManager.getMenuResMan().unloadMenuResources();
+		GameScreenManager.getGameScreenMan().createLoadingScene(pOnCreateSceneCallback);
 	}
 
 	@Override
@@ -71,18 +66,12 @@ public class GameActivity extends BaseGameActivity {
 	            {
 	                mEngine.unregisterUpdateHandler(pTimerHandler);
 	                GameResourceManager.getGameResMan().loadGameResources();
-	                level = new GameScene();
-	                level.createScene();
+	                GameScreenManager.getGameScreenMan().createGameScene();
+	                GameScreenManager.getGameScreenMan().disposeLoading();
+	                
 	            }
 	    }));
 	    pOnPopulateSceneCallback.onPopulateSceneFinished();
-	}
-	
-	private void createLoadingScreen() {
-		loadingScene = new Scene();
-		loading = new Sprite(0, 0, GameResourceManager.getGameResMan().loadingTR, mEngine.getVertexBufferObjectManager());
-		loading.setPosition(240, 200);
-		loadingScene.attachChild(loading);
 	}
 
 }
