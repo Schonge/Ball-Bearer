@@ -1,6 +1,7 @@
 package com.jconnolly.ballbearer.scenes;
 
 import org.andengine.entity.sprite.Sprite;
+
 import com.jconnolly.ballbearer.SceneManager.SceneType;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 

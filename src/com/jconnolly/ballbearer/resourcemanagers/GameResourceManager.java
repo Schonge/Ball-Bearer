@@ -17,138 +17,139 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.graphics.Color;
 
-import com.jconnolly.ballbearer.activities.GameActivity;
+import com.jconnolly.ballbearer.activities.LevelTwoActivity;
 import com.jconnolly.ballbearer.tiles.TileManager;
+
 
 public class GameResourceManager {
 	
 	//====================================================
-		// CONSTANTS
-		//====================================================
+	// CONSTANTS
+	//====================================================
 		
-		// AppResourceManager instance
-		private static final GameResourceManager GAME_RES_MAN = new GameResourceManager();
+	// AppResourceManager instance
+	private static final GameResourceManager GAME_RES_MAN = new GameResourceManager();
 		
-		//====================================================
-		// VARIABLES
-		//====================================================
+	//====================================================
+	// VARIABLES
+	//====================================================
 		
-		public Engine engine;
-		public Camera camera;
-		public VertexBufferObjectManager vbom;
-		public GameActivity gameActivity;
+	public Engine engine;
+	public Camera camera;
+	public VertexBufferObjectManager vbom;
+	public LevelTwoActivity levelTwoAct;
 		
-		// Loading Screen graphics
-		public BitmapTextureAtlas loadingTextureAtlas;
-		public ITextureRegion loadingTR;
+	// Loading Screen graphics
+	public BitmapTextureAtlas loadingTextureAtlas;
+	public ITextureRegion loadingTR;
 		
-		// Game graphics
-		public BuildableBitmapTextureAtlas gameTextureAtlas;
-		public ITextureRegion levelBackTR;
-		public ITextureRegion wallTR;
-		public ITextureRegion trapHoleTR;
-		public ITextureRegion ballTR;
-		public ITextureRegion finishTR;
+	// Game graphics
+	public BuildableBitmapTextureAtlas gameTextureAtlas;
+	public ITextureRegion levelBackTR;
+	public ITextureRegion wallTR;
+	public ITextureRegion trapHoleTR;
+	public ITextureRegion ballTR;
+	public ITextureRegion finishTR;
 		
+	// Fonts
+	public Font simpFont;
+	private static final int FONT_SIZE = 32;
+	
+	// Tile Manager
+	public TileManager tileManager;
+	
+	// Level Complete Graphics
+	public BitmapTextureAtlas levelCompleteTextureAtlas;
+	public ITextureRegion levelCompleteTR;
+	
+	//====================================================
+	// METHODS
+	//====================================================
+		
+	public void loadLoadingResources() {
+		// Graphics
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.loadingTextureAtlas = new BitmapTextureAtlas(levelTwoAct.getTextureManager(), 1024, 1024);
+		loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, levelTwoAct,
+				"loadingText.png", 0, 0);
+		loadingTextureAtlas.load();
+		// Sounds
+	}
+		
+	public void loadGameResources() {
 		// Fonts
-		public Font simpFont;
-		private static final int FONT_SIZE = 32;
+		final ITexture simpFontText = new BitmapTextureAtlas(levelTwoAct.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		
-		// Tile Manager
-		public TileManager tileManager;
+		FontFactory.setAssetBasePath("font/");
+		this.simpFont = FontFactory.createFromAsset(levelTwoAct.getFontManager(), simpFontText, levelTwoAct.getAssets(),
+				"Simpsonfont.ttf", FONT_SIZE, true, Color.YELLOW);
+		this.simpFont.load();
 		
-		// Level Complete Graphics
-		public BitmapTextureAtlas levelCompleteTextureAtlas;
-		public ITextureRegion levelCompleteTR;
+		// Graphics
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.gameTextureAtlas = new BuildableBitmapTextureAtlas(levelTwoAct.getTextureManager(), 1024, 1024);
+		levelBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct,
+				"level_background2.png");
+		ballTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "redBall.png");
+		wallTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "blackWall.png");
+		trapHoleTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "trapHole.png");
+		finishTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "redGoal.png");
+		gameTextureAtlas.load();
 		
-		//====================================================
-		// METHODS
-		//====================================================
-		
-		public void loadLoadingResources() {
-			// Graphics
-			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-			this.loadingTextureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
-			loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, gameActivity,
-					"loadingText.png", 0, 0);
-			loadingTextureAtlas.load();
-			// Sounds
+		// Builds an area for holding and rendering textures
+		try {
+			this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+			this.gameTextureAtlas.load();
+		} catch (TextureAtlasBuilderException e) {
+			e.printStackTrace();
 		}
 		
-		public void loadGameResources() {
-			// Fonts
-			final ITexture simpFontText = new BitmapTextureAtlas(gameActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-			
-			FontFactory.setAssetBasePath("font/");
-			this.simpFont = FontFactory.createFromAsset(gameActivity.getFontManager(), simpFontText, gameActivity.getAssets(),
-					"Simpsonfont.ttf", FONT_SIZE, true, Color.YELLOW);
-			this.simpFont.load();
-			
-			// Graphics
-			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-			this.gameTextureAtlas = new BuildableBitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
-			levelBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity,
-					"level_background2.png");
-			ballTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity, "redBall.png");
-			wallTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity, "blackWall.png");
-			trapHoleTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity, "trapHole.png");
-			finishTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, gameActivity, "redGoal.png");
-			gameTextureAtlas.load();
-			
-			// Builds an area for holding and rendering textures
-			try {
-				this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
-				this.gameTextureAtlas.load();
-			} catch (TextureAtlasBuilderException e) {
-				e.printStackTrace();
-			}
-			
-			// Sounds
-		}
+		// Sounds
+	}
 		
-		public void loadTileManager() {
-			loadGameResources();
-			tileManager = new TileManager(vbom);
-		}
+	public void loadTileManager() {
+		loadGameResources();
+		tileManager = new TileManager(vbom);
+	}
+	
+	public void loadLevelCompleteResources() {
+		// Graphics
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.levelCompleteTextureAtlas = new BitmapTextureAtlas(levelTwoAct.getTextureManager(), 1024, 1024);
+		levelCompleteTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelCompleteTextureAtlas, levelTwoAct,
+				"levelComplete.png", 0, 0);
+		levelCompleteTextureAtlas.load();
+		// Sounds
+	}
 		
-		public void loadLevelCompleteResources() {
-			// Graphics
-			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-			this.levelCompleteTextureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
-			levelCompleteTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelCompleteTextureAtlas, gameActivity,
-					"levelComplete.png", 0, 0);
-			levelCompleteTextureAtlas.load();
-			// Sounds
-		}
+	public void unloadLoadingResources() {
+		loadingTextureAtlas.unload();
+		loadingTR = null;
+	}
 		
-		public void unloadLoadingResources() {
-			loadingTextureAtlas.unload();
-			loadingTR = null;
-		}
+	public void unloadGameResources() {
+		gameTextureAtlas.unload();
+		gameTextureAtlas = null;
+	}
 		
-		public void unloadGameResources() {
-			gameTextureAtlas.unload();
-			gameTextureAtlas = null;
-		}
+	public void unloadLevelCompleteResources() {
+		levelCompleteTextureAtlas.unload();
+		levelCompleteTR = null;
+	}
 		
-		public void unloadLevelCompleteResources() {
-			levelCompleteTextureAtlas.unload();
-			levelCompleteTR = null;
-		}
+	public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, LevelTwoActivity levelTwoAct) {
+		getGameResMan().engine = eng;
+		getGameResMan().camera = cam;
+		getGameResMan().vbom = vbom;
+		getGameResMan().levelTwoAct = levelTwoAct;
+	}
 		
-		public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, GameActivity gAct) {
-			getGameResMan().engine = eng;
-			getGameResMan().camera = cam;
-			getGameResMan().vbom = vbom;
-			getGameResMan().gameActivity = gAct;
-		}
-		
-		//===================================================
-		// GETTERS AND SETTERS
-		//===================================================
+	//===================================================
+	// GETTERS AND SETTERS
+	//===================================================
 
-		public static GameResourceManager getGameResMan() {
-			return GAME_RES_MAN;
-		}
+	public static GameResourceManager getGameResMan() {
+		return GAME_RES_MAN;
+	}
 
 }

@@ -2,10 +2,10 @@ package com.jconnolly.ballbearer.scenes;
 
 import org.andengine.entity.sprite.Sprite;
 
-import com.jconnolly.ballbearer.GameScreenManager.GameSceneType;
+import com.jconnolly.ballbearer.LevelListManger.LevelType;
 import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
 
-public class LoadingScene extends BaseGameScene {
+public class LoadingScene extends BaseLevelScene {
 	
 	private Sprite loading;
 
@@ -14,11 +14,6 @@ public class LoadingScene extends BaseGameScene {
 		loading = createSprite(0, 0, GameResourceManager.getGameResMan().loadingTR, vbom);
 		loading.setPosition(240, 200);
 		attachChild(loading);
-	}
-
-	@Override
-	public GameSceneType getSceneType() {
-		return GameSceneType.LOADING_SCENE;
 	}
 
 	@Override
@@ -34,5 +29,12 @@ public class LoadingScene extends BaseGameScene {
 		this.detachSelf();
 		this.dispose();
 	}
+
+	@Override
+	public LevelType getLevelType() {
+		return null;
+	}
+
+	
 
 }

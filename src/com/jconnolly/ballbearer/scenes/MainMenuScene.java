@@ -7,6 +7,7 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 
+import com.jconnolly.ballbearer.SceneManager;
 import com.jconnolly.ballbearer.SceneManager.SceneType;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
@@ -46,7 +47,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	public void createMenu() {
 		// Background
-		this.background = createSprite(0, 0, MenuResourceManager.getMenuResMan().menuBackTR, vbom);
+		this.background = new Sprite(0, 0, MenuResourceManager.getMenuResMan().menuBackTR, vbom);
 		attachChild(this.background);
 		
 		// Menu buttons etc.
@@ -78,7 +79,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		switch(pMenuItem.getID()) {
 		case MENU_PLAY:
 			// Load the Game
-			menuActivity.menuToGame();
+			menuActivity.menuToLevelList();
 			destroyScene();
 			return true;
 		case MENU_SCORE:
@@ -86,6 +87,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		case MENU_OPTIONS:
 			return true;
 		case MENU_HELP:
+			SceneManager.getSceneMan().createHelp();
 			return true;
 		}
 		return false;

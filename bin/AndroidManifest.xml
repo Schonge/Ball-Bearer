@@ -32,12 +32,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.jconnolly.ballbearer.activities.GameActivity"
+                <activity
+            android:name="com.jconnolly.ballbearer.activities.LevelListActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="com.jconnolly.ballbearer.activities.GAMEACTIVITY" />
+                <action android:name="com.jconnolly.ballbearer.activities.LEVELLISTACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jconnolly.ballbearer.activities.LevelTwoActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.jconnolly.ballbearer.activities.LEVELTWOACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

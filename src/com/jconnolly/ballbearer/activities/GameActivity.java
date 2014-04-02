@@ -22,6 +22,7 @@ import android.hardware.SensorManager;
 
 import com.badlogic.gdx.math.Vector2;
 import com.jconnolly.ballbearer.GameScreenManager;
+import com.jconnolly.ballbearer.GameScreenManager.GameSceneType;
 import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
@@ -63,7 +64,7 @@ public class GameActivity extends BaseGameActivity implements SensorEventListene
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
-		GameResourceManager.prepareManager(getEngine(), this.camera, getVertexBufferObjectManager(), this);
+		//GameResourceManager.prepareManager(getEngine(), this.camera, getVertexBufferObjectManager(), this);
 		GameResourceManager.getGameResMan();
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
@@ -92,6 +93,7 @@ public class GameActivity extends BaseGameActivity implements SensorEventListene
 	                mEngine.unregisterUpdateHandler(pTimerHandler);
 	                GameResourceManager.getGameResMan().loadGameResources();
 	                GameScreenManager.getGameScreenMan().createGameScene();
+	                GameScreenManager.getGameScreenMan().setScene(GameSceneType.LEVEL_SCENE);
 	                GameScreenManager.getGameScreenMan().disposeLoading();
 	            }
 	    }));

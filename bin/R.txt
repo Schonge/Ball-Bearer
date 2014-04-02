@@ -6,6 +6,7 @@ int drawable logo 0x7f020002
 int id action_settings 0x7f080000
 int layout activity_app 0x7f030000
 int layout activity_game 0x7f030001
+int layout activity_level_list 0x7f030002
 int menu game 0x7f070000
 int string action_settings 0x7f050001
 int string app_name 0x7f050000

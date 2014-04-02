@@ -36,6 +36,7 @@ public class LevelManager {
 		lvlLoader.setAssetBasePath("levels/");
 		this.assetMan = assetMan;
 		addNewLevel(1, "example.lvl");
+		addNewLevel(2, "example2.lvl");
 	}
 	
 	private void addNewLevel(int id, String name) {

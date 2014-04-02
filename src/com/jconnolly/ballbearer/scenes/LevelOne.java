@@ -14,11 +14,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.jconnolly.ballbearer.GameScreenManager.GameSceneType;
+import com.jconnolly.ballbearer.LevelListManger.LevelType;
 import com.jconnolly.ballbearer.level.LevelManager;
 import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
 
-public class GameScene extends BaseGameScene {
+public class LevelOne extends BaseLevelScene {
 	
 	private HUD gameHUD;
 	private Text scoreText;
@@ -36,17 +36,12 @@ public class GameScene extends BaseGameScene {
 	
 	@Override
 	public void createScene() {
-		lvlMan = new LevelManager(gameActivity.getAssets());
+		lvlMan = new LevelManager(levelListActivity.getAssets());
 		createBackground();
 		createHUD();
 		createPhysics();
 		addPlayer();
 		createLevel();
-	}
-
-	@Override
-	public GameSceneType getSceneType() {
-		return GameSceneType.LEVEL_SCENE;
 	}
 
 	@Override
@@ -97,6 +92,11 @@ public class GameScene extends BaseGameScene {
 		ballBody = PhysicsFactory.createBoxBody(physicsWorld, ball, BodyType.DynamicBody, ballFixtureDef);
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball, ballBody, true, false));
 		attachChild(ball);
+	}
+
+	@Override
+	public LevelType getLevelType() {
+		return null;
 	}
 	
 	//===================================================

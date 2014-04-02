@@ -7,11 +7,11 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.jconnolly.ballbearer.GameScreenManager.GameSceneType;
-import com.jconnolly.ballbearer.activities.GameActivity;
-import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
+import com.jconnolly.ballbearer.LevelListManger.LevelType;
+import com.jconnolly.ballbearer.activities.LevelListActivity;
+import com.jconnolly.ballbearer.resourcemanagers.LevelListResourceManager;
 
-public abstract class BaseGameScene extends Scene {
+public abstract class BaseLevelScene extends Scene {
 	
 	//====================================================
 	// CONSTANTS
@@ -24,17 +24,17 @@ public abstract class BaseGameScene extends Scene {
 	protected Engine engine;
 	protected Camera camera;
 	protected VertexBufferObjectManager vbom;
-	protected GameActivity gameActivity;
+	protected LevelListActivity levelListActivity;
 	
 	//====================================================
 	// CONSTRUCTOR
 	//====================================================
 	
-	public BaseGameScene() {
-		this.engine = GameResourceManager.getGameResMan().engine;
-		this.camera = GameResourceManager.getGameResMan().camera;
-		this.vbom = GameResourceManager.getGameResMan().vbom;
-		this.gameActivity = GameResourceManager.getGameResMan().gameActivity;
+	public BaseLevelScene() {
+		this.engine = LevelListResourceManager.getLevelListResMan().engine;
+		this.camera = LevelListResourceManager.getLevelListResMan().camera;
+		this.vbom = LevelListResourceManager.getLevelListResMan().vbom;
+		this.levelListActivity = LevelListResourceManager.getLevelListResMan().levelListActivity;
 		createScene();
 	}
 	
@@ -51,7 +51,7 @@ public abstract class BaseGameScene extends Scene {
 	
 	public abstract void createScene();
 	
-	public abstract GameSceneType getSceneType();
+	public abstract LevelType getLevelType();
 	
 	public abstract void onBackPressed();
 	

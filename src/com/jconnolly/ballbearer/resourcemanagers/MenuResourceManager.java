@@ -52,9 +52,11 @@ public class MenuResourceManager {
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	public BitmapTextureAtlas menuBackTexture;
 	public ITextureRegion menuBackTR;
+	public ITextureRegion helpBackTR;
 	public ITextureRegion playBtnTR;
 	public ITextureRegion scoreBtnTR;
 	public ITextureRegion helpBtnTR;
+	public ITextureRegion backBtnTR;
 	
 	// Sounds
 	public Music music;
@@ -85,9 +87,11 @@ public class MenuResourceManager {
 		playBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "playBtn.png");
 		scoreBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "scoreBtn.png");
 		helpBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "helpBtn.png");
+		backBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "backBtn.png");
 		
 		this.menuBackTexture = new BitmapTextureAtlas(menuActivity.getTextureManager(), 800, 480);
 		this.menuBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "menuBackground.png");
+		this.helpBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "helpBackground.png");
 		
 		// Builds an area for holding and rendering textures
 		try {
@@ -113,6 +117,7 @@ public class MenuResourceManager {
 		playBtnTR = null;
 		scoreBtnTR = null;
 		helpBtnTR = null;
+		backBtnTR = null;
 		menuBackTexture = null;
 	}
 	

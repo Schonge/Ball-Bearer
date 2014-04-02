@@ -5,6 +5,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 import com.jconnolly.ballbearer.scenes.BaseScene;
+import com.jconnolly.ballbearer.scenes.HelpScene;
 import com.jconnolly.ballbearer.scenes.MainMenuScene;
 import com.jconnolly.ballbearer.scenes.SplashScene;
 
@@ -29,6 +30,7 @@ public class SceneManager {
 		OPTIONS_SCENE,
 		HELP_SCENE,
 		LOADING_SCENE,
+		LEVEL_LIST_SCENE,
 	}
 	
 	//====================================================
@@ -51,6 +53,7 @@ public class SceneManager {
 	
 	public void createHelp() {
 		MenuResourceManager.getMenuResMan().loadMenuResources();
+		helpScene = new HelpScene();
 		currentScene = helpScene;
 		setScene(helpScene);
 	}
