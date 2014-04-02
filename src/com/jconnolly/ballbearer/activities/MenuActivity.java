@@ -78,7 +78,9 @@ public class MenuActivity extends BaseGameActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		System.exit(0);
+		if(this.isGameLoaded()) {
+			System.exit(0);
+		}
 	}
 	
 	@Override
@@ -90,6 +92,7 @@ public class MenuActivity extends BaseGameActivity {
 	}
 	
 	public void menuToGame() {
+		MenuResourceManager.getMenuResMan().unloadMenuResources();
 		Intent menuIntent = new Intent("com.jconnolly.ballbearer.activities.GAMEACTIVITY");
 		startActivity(menuIntent);
 	}

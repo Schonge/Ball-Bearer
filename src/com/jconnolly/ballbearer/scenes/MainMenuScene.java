@@ -56,13 +56,16 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// ScaleMenuItemDecorator provides a scale animation for menu buttons when pressed
 		final IMenuItem playItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, MenuResourceManager.getMenuResMan().playBtnTR, vbom), 1.2f, 1);
 		final IMenuItem scoreItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_SCORE, MenuResourceManager.getMenuResMan().scoreBtnTR, vbom), 1.2f, 1);
+		final IMenuItem helpItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_HELP, MenuResourceManager.getMenuResMan().helpBtnTR, vbom), 1.2f, 1);
 		menuChild.addMenuItem(playItem);
 		menuChild.addMenuItem(scoreItem);
+		menuChild.addMenuItem(helpItem);
 		
 		menuChild.buildAnimations();
 		menuChild.setBackgroundEnabled(false);
 		playItem.setPosition(playItem.getX(), playItem.getY());
 		scoreItem.setPosition(scoreItem.getX(), scoreItem.getY() + 30);
+		helpItem.setPosition(helpItem.getX(), helpItem.getY() + 60);
 		
 			
 		menuChild.setOnMenuItemClickListener(this);

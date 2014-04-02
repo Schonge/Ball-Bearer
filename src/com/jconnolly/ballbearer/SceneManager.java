@@ -49,33 +49,11 @@ public class SceneManager {
 		setScene(menuScene);
 	}
 	
-	/*public void createLoading(OnCreateSceneCallback pOnCreateSceneCallback) {
-		GameResourceManager.getGameResMan().loadLoadingResources();
-		loadingScene = new LoadingScene();
-		setScene(loadingScene);
-		disposeMenu();
+	public void createHelp() {
+		MenuResourceManager.getMenuResMan().loadMenuResources();
+		currentScene = helpScene;
+		setScene(helpScene);
 	}
-	
-	public void createGameScreen(final Engine mEngine) {
-		createLoading(null);
-		MenuResourceManager.getMenuResMan().unloadMenuResources();
-		mEngine.registerUpdateHandler(new TimerHandler(1.0f, new ITimerCallback() {
-			
-			@Override
-			public void onTimePassed(TimerHandler pTimerHandler) {
-				mEngine.registerUpdateHandler(pTimerHandler);
-				GameResourceManager.getGameResMan().loadGameResources();
-				gameScene = new GameScene();
-				setScene(gameScene);
-			}
-		}));
-	}
-	
-	public void disposeLoading() {
-		GameResourceManager.getGameResMan().unloadLoadingResources();
-		loadingScene.destroyScene();
-		loadingScene = null;
-	}*/
 	
 	public void disposeSplash() {
 		MenuResourceManager.getMenuResMan().unloadSplashResources();

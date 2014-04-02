@@ -2,6 +2,10 @@ package com.jconnolly.ballbearer.resourcemanagers;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -10,6 +14,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import android.graphics.Color;
 
 import com.jconnolly.ballbearer.activities.GameActivity;
 import com.jconnolly.ballbearer.tiles.TileManager;
@@ -44,8 +50,16 @@ public class GameResourceManager {
 		public ITextureRegion ballTR;
 		public ITextureRegion finishTR;
 		
+		// Fonts
+		public Font simpFont;
+		private static final int FONT_SIZE = 32;
+		
 		// Tile Manager
 		public TileManager tileManager;
+		
+		// Level Complete Graphics
+		public BitmapTextureAtlas levelCompleteTextureAtlas;
+		public ITextureRegion levelCompleteTR;
 		
 		//====================================================
 		// METHODS
@@ -62,6 +76,14 @@ public class GameResourceManager {
 		}
 		
 		public void loadGameResources() {
+			// Fonts
+			final ITexture simpFontText = new BitmapTextureAtlas(gameActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+			
+			FontFactory.setAssetBasePath("font/");
+			this.simpFont = FontFactory.createFromAsset(gameActivity.getFontManager(), simpFontText, gameActivity.getAssets(),
+					"Simpsonfont.ttf", FONT_SIZE, true, Color.YELLOW);
+			this.simpFont.load();
+			
 			// Graphics
 			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 			this.gameTextureAtlas = new BuildableBitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
@@ -89,6 +111,16 @@ public class GameResourceManager {
 			tileManager = new TileManager(vbom);
 		}
 		
+		public void loadLevelCompleteResources() {
+			// Graphics
+			BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+			this.levelCompleteTextureAtlas = new BitmapTextureAtlas(gameActivity.getTextureManager(), 1024, 1024);
+			levelCompleteTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelCompleteTextureAtlas, gameActivity,
+					"levelComplete.png", 0, 0);
+			levelCompleteTextureAtlas.load();
+			// Sounds
+		}
+		
 		public void unloadLoadingResources() {
 			loadingTextureAtlas.unload();
 			loadingTR = null;
@@ -97,6 +129,11 @@ public class GameResourceManager {
 		public void unloadGameResources() {
 			gameTextureAtlas.unload();
 			gameTextureAtlas = null;
+		}
+		
+		public void unloadLevelCompleteResources() {
+			levelCompleteTextureAtlas.unload();
+			levelCompleteTR = null;
 		}
 		
 		public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, GameActivity gAct) {

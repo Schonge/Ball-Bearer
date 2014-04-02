@@ -1,5 +1,9 @@
 package com.jconnolly.ballbearer.resourcemanagers;
 
+import java.io.IOException;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.texture.TextureOptions;
@@ -50,6 +54,10 @@ public class MenuResourceManager {
 	public ITextureRegion menuBackTR;
 	public ITextureRegion playBtnTR;
 	public ITextureRegion scoreBtnTR;
+	public ITextureRegion helpBtnTR;
+	
+	// Sounds
+	public Music music;
 	
 	//====================================================
 	// METHODS
@@ -76,6 +84,7 @@ public class MenuResourceManager {
 		this.menuTextureAtlas = new BuildableBitmapTextureAtlas(menuActivity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
 		playBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "playBtn.png");
 		scoreBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "scoreBtn.png");
+		helpBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "helpBtn.png");
 		
 		this.menuBackTexture = new BitmapTextureAtlas(menuActivity.getTextureManager(), 800, 480);
 		this.menuBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, menuActivity, "menuBackground.png");
@@ -89,6 +98,13 @@ public class MenuResourceManager {
 		}
 		
 		// Sounds
+		try {
+			music = MusicFactory.createMusicFromAsset(menuActivity.getMusicManager(), menuActivity, "mfx/DSTAircord.mp3");
+			music.play();
+			music.setLooping(true);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void unloadMenuResources() {
@@ -96,6 +112,7 @@ public class MenuResourceManager {
 		menuBackTR = null;
 		playBtnTR = null;
 		scoreBtnTR = null;
+		helpBtnTR = null;
 		menuBackTexture = null;
 	}
 	
