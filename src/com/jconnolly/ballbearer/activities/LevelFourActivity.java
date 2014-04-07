@@ -58,10 +58,6 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
 	// Sprites
 	private Sprite background;
 	private Sprite ball;
-	private Sprite finishPoint2;
-	private Sprite finishPoint3;
-	private Sprite finishPoint4;
-	private Sprite finishPoint5;
 	
 	// Obstacles
 	private Sprite block;
@@ -129,21 +125,11 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 		ball = new Sprite(200, 300, LevelFourResourceManager.getLvlFourResMan().ballTR, mEngine.getVertexBufferObjectManager());
 		
-		/*finishPoint2 = new Sprite(300, 200, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());
-		finishPoint3 = new Sprite(654, 150, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());
-		finishPoint4 = new Sprite(758, 90, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());
-		finishPoint5 = new Sprite(419, 357, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());*/
-		
 		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
 		//final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
 		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
 		this.level.attachChild(ball);
-		
-		/*this.level.attachChild(finishPoint2);
-		this.level.attachChild(finishPoint3);
-		this.level.attachChild(finishPoint4);
-		this.level.attachChild(finishPoint5);*/
 		
 		final Sprite finishPoint = new Sprite(10, 10, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
 
