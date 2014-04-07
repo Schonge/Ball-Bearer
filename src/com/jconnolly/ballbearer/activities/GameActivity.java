@@ -23,7 +23,7 @@ import android.hardware.SensorManager;
 import com.badlogic.gdx.math.Vector2;
 import com.jconnolly.ballbearer.GameScreenManager;
 import com.jconnolly.ballbearer.GameScreenManager.GameSceneType;
-import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
+import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
 public class GameActivity extends BaseGameActivity implements SensorEventListener {
@@ -65,7 +65,7 @@ public class GameActivity extends BaseGameActivity implements SensorEventListene
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
 		//GameResourceManager.prepareManager(getEngine(), this.camera, getVertexBufferObjectManager(), this);
-		GameResourceManager.getGameResMan();
+		LevelTwoResourceManager.getLvlTwoResMan();
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
@@ -76,7 +76,7 @@ public class GameActivity extends BaseGameActivity implements SensorEventListene
 		sensorMan.registerListener(this, sensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
 		
 		physicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
-		GameResourceManager.getGameResMan().engine.registerUpdateHandler(physicsWorld);
+		LevelTwoResourceManager.getLvlTwoResMan().engine.registerUpdateHandler(physicsWorld);
 		
 		MenuResourceManager.getMenuResMan().unloadMenuResources();
 		GameScreenManager.getGameScreenMan().createLoadingScene(pOnCreateSceneCallback);
@@ -91,7 +91,7 @@ public class GameActivity extends BaseGameActivity implements SensorEventListene
 	            public void onTimePassed(final TimerHandler pTimerHandler) 
 	            {
 	                mEngine.unregisterUpdateHandler(pTimerHandler);
-	                GameResourceManager.getGameResMan().loadGameResources();
+	                LevelTwoResourceManager.getLvlTwoResMan().loadGameResources();
 	                GameScreenManager.getGameScreenMan().createGameScene();
 	                GameScreenManager.getGameScreenMan().setScene(GameSceneType.LEVEL_SCENE);
 	                GameScreenManager.getGameScreenMan().disposeLoading();

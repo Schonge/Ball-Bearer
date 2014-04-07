@@ -17,18 +17,17 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.graphics.Color;
 
-import com.jconnolly.ballbearer.activities.LevelTwoActivity;
+import com.jconnolly.ballbearer.activities.LevelOneActivity;
 import com.jconnolly.ballbearer.tiles.TileManager;
 
-
-public class GameResourceManager {
+public class LevelOneResourceManager {
 	
 	//====================================================
 	// CONSTANTS
 	//====================================================
 		
 	// AppResourceManager instance
-	private static final GameResourceManager GAME_RES_MAN = new GameResourceManager();
+	private static final LevelOneResourceManager LEVEL_ONE_MAN = new LevelOneResourceManager();
 		
 	//====================================================
 	// VARIABLES
@@ -37,7 +36,7 @@ public class GameResourceManager {
 	public Engine engine;
 	public Camera camera;
 	public VertexBufferObjectManager vbom;
-	public LevelTwoActivity levelTwoAct;
+	public LevelOneActivity levelOneAct;
 		
 	// Loading Screen graphics
 	public BitmapTextureAtlas loadingTextureAtlas;
@@ -69,8 +68,8 @@ public class GameResourceManager {
 	public void loadLoadingResources() {
 		// Graphics
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.loadingTextureAtlas = new BitmapTextureAtlas(levelTwoAct.getTextureManager(), 1024, 1024);
-		loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, levelTwoAct,
+		this.loadingTextureAtlas = new BitmapTextureAtlas(levelOneAct.getTextureManager(), 1024, 1024);
+		loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, levelOneAct,
 				"loadingText.png", 0, 0);
 		loadingTextureAtlas.load();
 		// Sounds
@@ -78,22 +77,22 @@ public class GameResourceManager {
 		
 	public void loadGameResources() {
 		// Fonts
-		final ITexture simpFontText = new BitmapTextureAtlas(levelTwoAct.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		final ITexture simpFontText = new BitmapTextureAtlas(levelOneAct.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
 		
 		FontFactory.setAssetBasePath("font/");
-		this.simpFont = FontFactory.createFromAsset(levelTwoAct.getFontManager(), simpFontText, levelTwoAct.getAssets(),
+		this.simpFont = FontFactory.createFromAsset(levelOneAct.getFontManager(), simpFontText, levelOneAct.getAssets(),
 				"Simpsonfont.ttf", FONT_SIZE, true, Color.YELLOW);
 		this.simpFont.load();
 		
 		// Graphics
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.gameTextureAtlas = new BuildableBitmapTextureAtlas(levelTwoAct.getTextureManager(), 1024, 1024);
-		levelBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct,
+		this.gameTextureAtlas = new BuildableBitmapTextureAtlas(levelOneAct.getTextureManager(), 1024, 1024);
+		levelBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelOneAct,
 				"level_background2.png");
-		ballTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "redBall.png");
-		wallTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "blackWall.png");
-		trapHoleTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "trapHole.png");
-		finishTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "redGoal.png");
+		ballTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelOneAct, "redBall.png");
+		wallTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelOneAct, "blackWall.png");
+		trapHoleTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelOneAct, "trapHole.png");
+		finishTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelOneAct, "orangeGoal.png");
 		gameTextureAtlas.load();
 		
 		// Builds an area for holding and rendering textures
@@ -115,8 +114,8 @@ public class GameResourceManager {
 	public void loadLevelCompleteResources() {
 		// Graphics
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.levelCompleteTextureAtlas = new BitmapTextureAtlas(levelTwoAct.getTextureManager(), 1024, 1024);
-		levelCompleteTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelCompleteTextureAtlas, levelTwoAct,
+		this.levelCompleteTextureAtlas = new BitmapTextureAtlas(levelOneAct.getTextureManager(), 1024, 1024);
+		levelCompleteTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelCompleteTextureAtlas, levelOneAct,
 				"levelComplete.png", 0, 0);
 		levelCompleteTextureAtlas.load();
 		// Sounds
@@ -137,19 +136,19 @@ public class GameResourceManager {
 		levelCompleteTR = null;
 	}
 		
-	public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, LevelTwoActivity levelTwoAct) {
-		getGameResMan().engine = eng;
-		getGameResMan().camera = cam;
-		getGameResMan().vbom = vbom;
-		getGameResMan().levelTwoAct = levelTwoAct;
+	public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, LevelOneActivity levelOneActivity) {
+		getLvlOneResMan().engine = eng;
+		getLvlOneResMan().camera = cam;
+		getLvlOneResMan().vbom = vbom;
+		getLvlOneResMan().levelOneAct = levelOneActivity;
 	}
 		
 	//===================================================
 	// GETTERS AND SETTERS
 	//===================================================
 
-	public static GameResourceManager getGameResMan() {
-		return GAME_RES_MAN;
+	public static LevelOneResourceManager getLvlOneResMan() {
+		return LEVEL_ONE_MAN;
 	}
 
 }

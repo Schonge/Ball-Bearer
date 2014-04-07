@@ -24,6 +24,7 @@ public class LevelListActivity extends BaseGameActivity {
 	
 	private Camera camera;
 	
+	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		this.camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -79,10 +80,28 @@ public class LevelListActivity extends BaseGameActivity {
 		return false;
 	}
 	
+	public void listToLevelOne() {
+		LevelListResourceManager.getLevelListResMan().unloadLevelListResources();
+		Intent levelOne = new Intent("com.jconnolly.ballbearer.activities.LEVELONEACTIVITY");
+		startActivity(levelOne);
+	}
+	
 	public void listToLevelTwo() {
 		LevelListResourceManager.getLevelListResMan().unloadLevelListResources();
 		Intent levelTwo = new Intent("com.jconnolly.ballbearer.activities.LEVELTWOACTIVITY");
 		startActivity(levelTwo);
+	}
+	
+	public void listToLevelThree() {
+		LevelListResourceManager.getLevelListResMan().unloadLevelListResources();
+		Intent levelThree = new Intent("com.jconnolly.ballbearer.activities.LEVELTHREEACTIVITY");
+		startActivity(levelThree);
+	}
+	
+	public void listToLevelFour() {
+		LevelListResourceManager.getLevelListResMan().unloadLevelListResources();
+		Intent levelFour = new Intent("com.jconnolly.ballbearer.activities.LEVELFOURACTIVITY");
+		startActivity(levelFour);
 	}
 
 }

@@ -43,11 +43,41 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.jconnolly.ballbearer.activities.LevelOneActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.jconnolly.ballbearer.activities.LEVELONEACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.jconnolly.ballbearer.activities.LevelTwoActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="com.jconnolly.ballbearer.activities.LEVELTWOACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jconnolly.ballbearer.activities.LevelThreeActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.jconnolly.ballbearer.activities.LEVELTHREEACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jconnolly.ballbearer.activities.LevelFourActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.jconnolly.ballbearer.activities.LEVELFOURACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

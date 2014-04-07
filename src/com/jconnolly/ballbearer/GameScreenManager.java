@@ -1,24 +1,24 @@
 package com.jconnolly.ballbearer;
 
 import org.andengine.engine.Engine;
+import org.andengine.entity.scene.Scene;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import com.jconnolly.ballbearer.LevelListManger.LevelType;
-import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
+import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 import com.jconnolly.ballbearer.scenes.BaseLevelScene;
-import com.jconnolly.ballbearer.scenes.LevelOne;
 import com.jconnolly.ballbearer.scenes.LoadingScene;
 
 public class GameScreenManager {
 	
 	private BaseLevelScene loadingScene;
-	private BaseLevelScene levelOne;
+	private Scene levelOne;
 	
 	private static final GameScreenManager GAME_SCREEN_MAN = new GameScreenManager();
 	
-	private BaseLevelScene currentScene;
+	private Scene currentScene;
 	private LevelType currentSceneType;
-	private Engine engine = GameResourceManager.getGameResMan().engine;
+	private Engine engine = LevelTwoResourceManager.getLvlTwoResMan().engine;
 	
 	public enum GameSceneType {
 		LOADING_SCENE,
@@ -31,22 +31,22 @@ public class GameScreenManager {
 
 	
 	public void createLoadingScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-		GameResourceManager.getGameResMan().loadLoadingResources();
+		LevelTwoResourceManager.getLvlTwoResMan().loadLoadingResources();
 		loadingScene = new LoadingScene();
 		currentScene = loadingScene;
 		pOnCreateSceneCallback.onCreateSceneFinished(loadingScene);
 	}
 	
 	public void createGameScene() {
-		GameResourceManager.getGameResMan().loadGameResources();
-		GameResourceManager.getGameResMan().loadTileManager();
-		levelOne = new LevelOne();
+		LevelTwoResourceManager.getLvlTwoResMan().loadGameResources();
+		LevelTwoResourceManager.getLvlTwoResMan().loadTileManager();
+		levelOne = new Scene();
 		currentScene = levelOne;
 		setScene(levelOne);
 	}
 	
 	public void disposeLoading() {
-		GameResourceManager.getGameResMan().unloadLoadingResources();
+		LevelTwoResourceManager.getLvlTwoResMan().unloadLoadingResources();
 		loadingScene.destroyScene();
 		loadingScene = null;
 	}
@@ -55,10 +55,9 @@ public class GameScreenManager {
 	// GETTERS AND SETTERS
 	//====================================================
 	
-	public void setScene(BaseLevelScene scene) {
-		engine.setScene(scene);
-		currentScene = scene;
-		currentSceneType = scene.getLevelType();
+	public void setScene(Scene levelOne2) {
+		engine.setScene(levelOne2);
+		currentScene = levelOne2;
 	}
 	
 	public void setScene(GameSceneType sceneType) {
@@ -75,7 +74,7 @@ public class GameScreenManager {
 		return GAME_SCREEN_MAN;
 	}
 	
-	public BaseLevelScene getCurrentScene() {
+	public Scene getCurrentScene() {
 		return currentScene;
 	}
 	

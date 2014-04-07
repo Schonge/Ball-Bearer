@@ -3,7 +3,7 @@ package com.jconnolly.ballbearer.scenes;
 import org.andengine.entity.sprite.Sprite;
 
 import com.jconnolly.ballbearer.LevelListManger.LevelType;
-import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
+import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 
 public class LoadingScene extends BaseLevelScene {
 	
@@ -11,7 +11,7 @@ public class LoadingScene extends BaseLevelScene {
 
 	@Override
 	public void createScene() {
-		loading = createSprite(0, 0, GameResourceManager.getGameResMan().loadingTR, vbom);
+		loading = createSprite(0, 0, LevelTwoResourceManager.getLvlTwoResMan().loadingTR, vbom);
 		loading.setPosition(240, 200);
 		attachChild(loading);
 	}

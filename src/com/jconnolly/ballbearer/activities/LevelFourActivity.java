@@ -33,10 +33,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
+import com.jconnolly.ballbearer.resourcemanagers.LevelFourResourceManager;
 
-public class LevelTwoActivity extends BaseGameActivity implements SensorEventListener {
-
+public class LevelFourActivity extends BaseGameActivity implements SensorEventListener {
+	
 	private static final int CAMERA_WIDTH = 800;
 	private static final int CAMERA_HEIGHT = 480;
 	
@@ -49,6 +49,8 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
     
     public boolean levelComplete = false;
 	
+    private int score = 0;
+    
     private HUD gameHUD;
 	private Text scoreText;
 	private PhysicsWorld physicsWorld;
@@ -56,9 +58,10 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 	// Sprites
 	private Sprite background;
 	private Sprite ball;
-	private Sprite ball2;
-	private Sprite ball3;
-	private Sprite finishPoint;
+	private Sprite finishPoint2;
+	private Sprite finishPoint3;
+	private Sprite finishPoint4;
+	private Sprite finishPoint5;
 	
 	// Obstacles
 	private Sprite block;
@@ -69,6 +72,7 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 	private Sprite trap;
 	private Sprite trap2;
 	private Sprite trap3;
+	private Sprite trap4;
 	
 	// Boundary Walls
 	private Rectangle bottom;
@@ -97,15 +101,15 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
-		LevelTwoResourceManager.prepareManager(getEngine(), this.camera, getVertexBufferObjectManager(), this);
-		LevelTwoResourceManager.getLvlTwoResMan().loadGameResources();
+		LevelFourResourceManager.prepareManager(getEngine(), this.camera, getVertexBufferObjectManager(), this);
+		LevelFourResourceManager.getLvlFourResMan().loadGameResources();
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
-		background = new Sprite(0, 0, LevelTwoResourceManager.getLvlTwoResMan().levelBackTR, mEngine.getVertexBufferObjectManager());
+		background = new Sprite(0, 0, LevelFourResourceManager.getLvlFourResMan().levelBackTR, mEngine.getVertexBufferObjectManager());
 		level = new Scene();
 		level.setBackground(new SpriteBackground(background));
 		
@@ -123,21 +127,40 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 	@Override
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
-		ball = new Sprite(200, 300, LevelTwoResourceManager.getLvlTwoResMan().ballTR, mEngine.getVertexBufferObjectManager());
-		ball2 = new Sprite(758, 438, LevelTwoResourceManager.getLvlTwoResMan().ball2TR, mEngine.getVertexBufferObjectManager());
-		ball3 = new Sprite(758, 10, LevelTwoResourceManager.getLvlTwoResMan().ball3TR, mEngine.getVertexBufferObjectManager());
-		finishPoint = new Sprite(10, 10, LevelTwoResourceManager.getLvlTwoResMan().finishTR, mEngine.getVertexBufferObjectManager());
+		ball = new Sprite(200, 300, LevelFourResourceManager.getLvlFourResMan().ballTR, mEngine.getVertexBufferObjectManager());
+		
+		/*finishPoint2 = new Sprite(300, 200, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());
+		finishPoint3 = new Sprite(654, 150, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());
+		finishPoint4 = new Sprite(758, 90, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());
+		finishPoint5 = new Sprite(419, 357, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager());*/
 		
 		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
-		final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
+		//final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
 		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
-		Body ballBody2 = PhysicsFactory.createCircleBody(physicsWorld, ball2, BodyType.DynamicBody, BALL_FIX);
-		Body ballBody3 = PhysicsFactory.createCircleBody(physicsWorld, ball3, BodyType.DynamicBody, BALL_FIX);
-		Body finishBody = PhysicsFactory.createCircleBody(physicsWorld, finishPoint, BodyType.StaticBody, FINISH_FIX);
 		this.level.attachChild(ball);
-		this.level.attachChild(ball2);
-		this.level.attachChild(ball3);
+		
+		/*this.level.attachChild(finishPoint2);
+		this.level.attachChild(finishPoint3);
+		this.level.attachChild(finishPoint4);
+		this.level.attachChild(finishPoint5);*/
+		
+		final Sprite finishPoint = new Sprite(10, 10, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
+
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+					System.exit(0);
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+			
+		};
+		// Disables rendering of sprite when not visible
+		finishPoint.setCullingEnabled(true);
 		this.level.attachChild(finishPoint);
 		
 		this.level.registerUpdateHandler(new IUpdateHandler() {
@@ -147,39 +170,14 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 			
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				int ballsRemaining = 3;
-				if(ball.collidesWith(finishPoint)) {
-					level.detachChild(ball);
-					ballsRemaining--;
-				} else if(ball2.collidesWith(finishPoint)) {
-					level.detachChild(ball2);
-					ballsRemaining--;
-				} else if(ball3.collidesWith(finishPoint)) {
-					level.detachChild(ball3);
-					ballsRemaining--;
-				} else if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3)) {
-					System.exit(0);
-				} else if(ball2.collidesWith(trap) || ball2.collidesWith(trap2) || ball2.collidesWith(trap3)) {
-					System.exit(0);
-				} else if(ball3.collidesWith(trap) || ball3.collidesWith(trap2) || ball3.collidesWith(trap3)) {
-					System.exit(0);
-				}
-				
-				if(ballsRemaining == 0) {
+				if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3) || ball.collidesWith(trap4)) {
 					System.exit(0);
 				}
 				
 			}
 		});
 		
-		
-		
-		
-		
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball, ballBody, true, false));
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball2, ballBody2, true, false));
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball3, ballBody3, true, false));
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(finishPoint, finishBody, false, false));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
@@ -214,15 +212,16 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		// int minX = 10, maxX = 758;
 		// int minY = 10, maxY = 438;
 		
-		block = new Sprite(400, 400, LevelTwoResourceManager.getLvlTwoResMan().wallTR, mEngine.getVertexBufferObjectManager());
-		block2 = new Sprite(700, 400, LevelTwoResourceManager.getLvlTwoResMan().wallTR, mEngine.getVertexBufferObjectManager());
-		block3 = new Sprite(600, 300, LevelTwoResourceManager.getLvlTwoResMan().wallTR, mEngine.getVertexBufferObjectManager());
-		block4 = new Sprite(100, 100, LevelTwoResourceManager.getLvlTwoResMan().wallTR, mEngine.getVertexBufferObjectManager());
-		block5 = new Sprite(300, 300, LevelTwoResourceManager.getLvlTwoResMan().wallTR, mEngine.getVertexBufferObjectManager());
+		block = new Sprite(400, 400, LevelFourResourceManager.getLvlFourResMan().wallTR, mEngine.getVertexBufferObjectManager());
+		block2 = new Sprite(700, 400, LevelFourResourceManager.getLvlFourResMan().wallTR, mEngine.getVertexBufferObjectManager());
+		block3 = new Sprite(600, 300, LevelFourResourceManager.getLvlFourResMan().wallTR, mEngine.getVertexBufferObjectManager());
+		block4 = new Sprite(100, 100, LevelFourResourceManager.getLvlFourResMan().wallTR, mEngine.getVertexBufferObjectManager());
+		block5 = new Sprite(300, 300, LevelFourResourceManager.getLvlFourResMan().wallTR, mEngine.getVertexBufferObjectManager());
 		
-		trap = new Sprite(200, 200, LevelTwoResourceManager.getLvlTwoResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
-		trap2 = new Sprite(100, 350, LevelTwoResourceManager.getLvlTwoResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
-		trap3 = new Sprite(510, 240, LevelTwoResourceManager.getLvlTwoResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
+		trap = new Sprite(200, 200, LevelFourResourceManager.getLvlFourResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
+		trap2 = new Sprite(100, 350, LevelFourResourceManager.getLvlFourResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
+		trap3 = new Sprite(510, 240, LevelFourResourceManager.getLvlFourResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
+		trap4 = new Sprite(732, 187, LevelFourResourceManager.getLvlFourResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
 		
 		Body blockBody = PhysicsFactory.createBoxBody(physicsWorld, block, BodyType.StaticBody, BLOCK_FIX);
 		Body blockBody2 = PhysicsFactory.createBoxBody(physicsWorld, block2, BodyType.StaticBody, BLOCK_FIX);
@@ -232,6 +231,7 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		Body trapBody = PhysicsFactory.createCircleBody(physicsWorld, trap, BodyType.StaticBody, TRAP_FIX);
 		Body trapBody2 = PhysicsFactory.createCircleBody(physicsWorld, trap2, BodyType.StaticBody, TRAP_FIX);
 		Body trapBody3 = PhysicsFactory.createCircleBody(physicsWorld, trap3, BodyType.StaticBody, TRAP_FIX);
+		Body trapBody4 = PhysicsFactory.createCircleBody(physicsWorld, trap4, BodyType.StaticBody, TRAP_FIX);
 		
 		level.attachChild(block);
 		level.attachChild(block2);
@@ -241,6 +241,7 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		level.attachChild(trap);
 		level.attachChild(trap2);
 		level.attachChild(trap3);
+		level.attachChild(trap4);
 		
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(block, blockBody, false, false));
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(block2, blockBody2, false, false));
@@ -250,6 +251,7 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(trap, trapBody, false, false));
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(trap2, trapBody2, false, false));
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(trap3, trapBody3, false, false));
+		physicsWorld.registerPhysicsConnector(new PhysicsConnector(trap3, trapBody4, false, false));
 	}
 
 	@Override
@@ -270,12 +272,17 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		gameHUD = new HUD();		
 		
 		// Score Text
-		scoreText = new Text(64, 11, LevelTwoResourceManager.getLvlTwoResMan().simpFont , "Score: 0123456789",
+		scoreText = new Text(64, 11, LevelFourResourceManager.getLvlFourResMan().simpFont , "Score: 0123456789",
 				new TextOptions(HorizontalAlign.LEFT), mEngine.getVertexBufferObjectManager());
 		scoreText.setText("Score: 0");
 		gameHUD.attachChild(scoreText);
 		
 		camera.setHUD(gameHUD);
+	}
+	
+	private void addToScore(int i) {
+		score += i;
+		scoreText.setText("Score: " + score);
 	}
 
 }

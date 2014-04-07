@@ -40,6 +40,7 @@ public class LevelListResourceManager {
 	public ITextureRegion levelOneBtnTR;
 	public ITextureRegion levelTwoBtnTR;
 	public ITextureRegion levelThreeBtnTR;
+	public ITextureRegion levelFourBtnTR;
 	
 	public void loadLevelListResources() {
 		// Graphics
@@ -48,6 +49,7 @@ public class LevelListResourceManager {
 		levelOneBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelListTextureAtlas, levelListActivity, "levelOneBtn.png");
 		levelTwoBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelListTextureAtlas, levelListActivity, "levelTwoBtn.png");
 		levelThreeBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelListTextureAtlas, levelListActivity, "levelThreeBtn.png");
+		levelFourBtnTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelListTextureAtlas, levelListActivity, "levelFourBtn.png");
 		
 		this.levelListBackTexture = new BitmapTextureAtlas(levelListActivity.getTextureManager(), 800, 480);
 		this.levelListBackTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(levelListTextureAtlas, levelListActivity, "levelListBack.png");
@@ -68,6 +70,7 @@ public class LevelListResourceManager {
 		levelOneBtnTR = null;
 		levelTwoBtnTR = null;
 		levelThreeBtnTR = null;
+		levelFourBtnTR = null;
 	}
 	
 	public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, LevelListActivity levelListAct) {

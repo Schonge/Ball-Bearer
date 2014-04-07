@@ -14,7 +14,7 @@ import org.xml.sax.Attributes;
 
 import android.content.res.AssetManager;
 
-import com.jconnolly.ballbearer.resourcemanagers.GameResourceManager;
+import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 import com.jconnolly.ballbearer.tiles.Tile;
 
 public class LevelManager {
@@ -63,7 +63,7 @@ public class LevelManager {
 				final int x = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TILE_ATTR_X);
 				final int y = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TILE_ATTR_Y);
 				final int id = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TILE_ATTR_TILE);
-				Tile t = GameResourceManager.getGameResMan().tileManager.getTileByID(id);
+				Tile t = LevelTwoResourceManager.getLvlTwoResMan().tileManager.getTileByID(id);
 				
 				lvl.addTiles(t.getTile(x, y));
 				return null;

@@ -105,7 +105,6 @@ public class MenuResourceManager {
 		try {
 			music = MusicFactory.createMusicFromAsset(menuActivity.getMusicManager(), menuActivity, "mfx/DSTAircord.mp3");
 			music.play();
-			music.setLooping(true);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
