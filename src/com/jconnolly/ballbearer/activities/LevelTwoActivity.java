@@ -35,8 +35,15 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 
+/*
+ * This class is the activity created for Level Two
+ */
 public class LevelTwoActivity extends BaseGameActivity implements SensorEventListener {
 
+	//=================================================
+	// VARIABLES
+	//=================================================
+	
 	private static final int CAMERA_WIDTH = 800;
 	private static final int CAMERA_HEIGHT = 480;
 	
@@ -47,7 +54,8 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
     private float tiltSpeedX;
     private float tiltSpeedY;
     
-    public boolean levelComplete = false;
+    private int score = 0;
+    private int finishPointsRem = 3;
 	
     private HUD gameHUD;
 	private Text scoreText;
@@ -58,7 +66,6 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 	private Sprite ball;
 	private Sprite ball2;
 	private Sprite ball3;
-	private Sprite finishPoint;
 	
 	// Obstacles
 	private Sprite block;
@@ -75,6 +82,10 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 	private Rectangle top;
 	private Rectangle right;
 	private Rectangle left;
+	
+	//=================================================
+	// METHODS
+	//=================================================
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -126,19 +137,65 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		ball = new Sprite(200, 300, LevelTwoResourceManager.getLvlTwoResMan().ballTR, mEngine.getVertexBufferObjectManager());
 		ball2 = new Sprite(758, 438, LevelTwoResourceManager.getLvlTwoResMan().ball2TR, mEngine.getVertexBufferObjectManager());
 		ball3 = new Sprite(758, 10, LevelTwoResourceManager.getLvlTwoResMan().ball3TR, mEngine.getVertexBufferObjectManager());
-		finishPoint = new Sprite(10, 10, LevelTwoResourceManager.getLvlTwoResMan().finishTR, mEngine.getVertexBufferObjectManager());
+		final Sprite finishPoint = new Sprite(10, 10, LevelTwoResourceManager.getLvlTwoResMan().finishTR,
+				mEngine.getVertexBufferObjectManager()) {
+			
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball3.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+					finishPointsRem--;
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+		};
+		finishPoint.setCullingEnabled(true);
+		this.level.attachChild(finishPoint);
+		
+		final Sprite finishPoint2 = new Sprite(300, 100, LevelTwoResourceManager.getLvlTwoResMan().finish2TR,
+				mEngine.getVertexBufferObjectManager()) {
+			
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+					finishPointsRem--;
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+		};
+		finishPoint2.setCullingEnabled(true);
+		this.level.attachChild(finishPoint2);
+		
+		final Sprite finishPoint3 = new Sprite(600, 435, LevelTwoResourceManager.getLvlTwoResMan().finish3TR,
+				mEngine.getVertexBufferObjectManager()) {
+			
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball2.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+					finishPointsRem--;
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+		};
+		finishPoint3.setCullingEnabled(true);
+		this.level.attachChild(finishPoint3);
 		
 		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
-		final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
 		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
 		Body ballBody2 = PhysicsFactory.createCircleBody(physicsWorld, ball2, BodyType.DynamicBody, BALL_FIX);
 		Body ballBody3 = PhysicsFactory.createCircleBody(physicsWorld, ball3, BodyType.DynamicBody, BALL_FIX);
-		Body finishBody = PhysicsFactory.createCircleBody(physicsWorld, finishPoint, BodyType.StaticBody, FINISH_FIX);
 		this.level.attachChild(ball);
 		this.level.attachChild(ball2);
 		this.level.attachChild(ball3);
-		this.level.attachChild(finishPoint);
 		
 		this.level.registerUpdateHandler(new IUpdateHandler() {
 			
@@ -147,39 +204,22 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 			
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				int ballsRemaining = 3;
-				if(ball.collidesWith(finishPoint)) {
-					level.detachChild(ball);
-					ballsRemaining--;
-				} else if(ball2.collidesWith(finishPoint)) {
-					level.detachChild(ball2);
-					ballsRemaining--;
-				} else if(ball3.collidesWith(finishPoint)) {
-					level.detachChild(ball3);
-					ballsRemaining--;
-				} else if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3)) {
+				if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3)) {
 					System.exit(0);
 				} else if(ball2.collidesWith(trap) || ball2.collidesWith(trap2) || ball2.collidesWith(trap3)) {
 					System.exit(0);
 				} else if(ball3.collidesWith(trap) || ball3.collidesWith(trap2) || ball3.collidesWith(trap3)) {
 					System.exit(0);
-				}
-				
-				if(ballsRemaining == 0) {
+				} else if(finishPointsRem == 0) {
 					System.exit(0);
 				}
 				
 			}
 		});
 		
-		
-		
-		
-		
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball, ballBody, true, false));
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball2, ballBody2, true, false));
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball3, ballBody3, true, false));
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(finishPoint, finishBody, false, false));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
@@ -276,6 +316,11 @@ public class LevelTwoActivity extends BaseGameActivity implements SensorEventLis
 		gameHUD.attachChild(scoreText);
 		
 		camera.setHUD(gameHUD);
+	}
+	
+	private void addToScore(int i) {
+		score += i;
+		scoreText.setText("Score: " + score);
 	}
 
 }

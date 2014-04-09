@@ -35,10 +35,21 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.jconnolly.ballbearer.resourcemanagers.LevelFourResourceManager;
 
+/*
+ * This class is the activity created for Level Four
+ */
 public class LevelFourActivity extends BaseGameActivity implements SensorEventListener {
+	
+	//=================================================
+	// CONSTANTS
+	//=================================================
 	
 	private static final int CAMERA_WIDTH = 800;
 	private static final int CAMERA_HEIGHT = 480;
+	
+	//=================================================
+	// VARIABLES
+	//=================================================
 	
 	private Camera camera;
 	private Scene level;
@@ -50,6 +61,7 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
     public boolean levelComplete = false;
 	
     private int score = 0;
+    private int scoreObjRemaining = 3;
     
     private HUD gameHUD;
 	private Text scoreText;
@@ -75,6 +87,10 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
 	private Rectangle top;
 	private Rectangle right;
 	private Rectangle left;
+	
+	//=================================================
+	// METHODS
+	//=================================================
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -126,12 +142,11 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
 		ball = new Sprite(200, 300, LevelFourResourceManager.getLvlFourResMan().ballTR, mEngine.getVertexBufferObjectManager());
 		
 		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
-		//final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
 		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
 		this.level.attachChild(ball);
 		
-		final Sprite finishPoint = new Sprite(10, 10, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
+		final Sprite scoreObject = new Sprite(10, 10, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
 
 			@Override
 			protected void onManagedUpdate(float pSecondsElapsed) {
@@ -139,15 +154,49 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
 					this.setVisible(false);
 					addToScore(10);
 					setIgnoreUpdate(true);
-					System.exit(0);
+					scoreObjRemaining--;
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+			
+		};
+		
+		final Sprite scoreObject2 = new Sprite(500, 200, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
+
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+					scoreObjRemaining--;
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+			
+		};
+		
+		final Sprite scoreObject3 = new Sprite(700, 360, LevelFourResourceManager.getLvlFourResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
+
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+					scoreObjRemaining--;
 				}
 				super.onManagedUpdate(pSecondsElapsed);
 			}
 			
 		};
 		// Disables rendering of sprite when not visible
-		finishPoint.setCullingEnabled(true);
-		this.level.attachChild(finishPoint);
+		scoreObject.setCullingEnabled(true);
+		scoreObject2.setCullingEnabled(true);
+		scoreObject3.setCullingEnabled(true);
+		this.level.attachChild(scoreObject);
+		this.level.attachChild(scoreObject2);
+		this.level.attachChild(scoreObject3);
 		
 		this.level.registerUpdateHandler(new IUpdateHandler() {
 			
@@ -157,6 +206,8 @@ public class LevelFourActivity extends BaseGameActivity implements SensorEventLi
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3) || ball.collidesWith(trap4)) {
+					System.exit(0);
+				} else if(scoreObjRemaining == 0) {
 					System.exit(0);
 				}
 				

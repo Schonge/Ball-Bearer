@@ -11,16 +11,26 @@ import com.jconnolly.ballbearer.SceneManager;
 import com.jconnolly.ballbearer.SceneManager.SceneType;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
+/*
+ * This class creates the application menu scene
+ */
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener {
+	
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private MenuScene menuChild;
 	private final int MENU_PLAY = 0;
 	private final int MENU_SCORE = 1;
-	private final int MENU_OPTIONS = 2;
-	private final int MENU_HELP = 3;
+	private final int MENU_HELP = 2;
 	
 	private Sprite background;
 
+	//=====================================================
+	// METHODS
+	//=====================================================
+	
 	@Override
 	public void createScene() {
 		createMenu();
@@ -45,6 +55,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		this.dispose();
 	}
 	
+	// This method creates the menu items and objects such as the touchable buttons
 	public void createMenu() {
 		// Background
 		this.background = new Sprite(0, 0, MenuResourceManager.getMenuResMan().menuBackTR, vbom);
@@ -73,6 +84,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		setChildScene(menuChild);
 	}
 
+	// This method switches between scenes based on which button was touched
 	@Override
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
@@ -83,8 +95,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 			destroyScene();
 			return true;
 		case MENU_SCORE:
-			return true;
-		case MENU_OPTIONS:
 			return true;
 		case MENU_HELP:
 			SceneManager.getSceneMan().createHelp();

@@ -11,12 +11,23 @@ import com.jconnolly.ballbearer.SceneManager;
 import com.jconnolly.ballbearer.SceneManager.SceneType;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
+/*
+ * Class for the help scene in the menu
+ */
 public class HelpScene extends BaseScene implements IOnMenuItemClickListener {
+	
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private MenuScene menuChild;
 	private final int BACK = 0;
 	
 	private Sprite help;
+	
+	//=====================================================
+	// METHODS
+	//=====================================================
 
 	@Override
 	public void createScene() {
@@ -41,6 +52,7 @@ public class HelpScene extends BaseScene implements IOnMenuItemClickListener {
 		this.dispose();
 	}
 	
+	// This method creates the Sprites and touchable back button for the help screen
 	public void createHelp() {
 		// Background
 		this.help = createSprite(0, 0, MenuResourceManager.getMenuResMan().helpBackTR, vbom);

@@ -10,23 +10,29 @@ import org.andengine.entity.sprite.Sprite;
 import com.jconnolly.ballbearer.LevelListManger.LevelType;
 import com.jconnolly.ballbearer.resourcemanagers.LevelListResourceManager;
 
+/*
+ * This class is used to display the list of levels available
+ * when the play button is touched in the main menu.
+ * Levels are selected from this scene.
+ */
 public class LevelListScene extends BaseLevelScene implements IOnMenuItemClickListener {
+
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private MenuScene menuChild;
 	private final int LEVEL_ONE = 0;
 	private final int LEVEL_TWO = 1;
 	private final int LEVEL_THREE = 2;
 	private final int LEVEL_FOUR = 3;
-	/*private final int LEVEL_FIVE = 4;
-	private final int LEVEL_SIX = 5;
-	private final int LEVEL_SEVEN = 6;
-	private final int LEVEL_EIGHT = 7;*/
 	
-	private boolean levelOneComplete = true;
-	private boolean levelTwoComplete = false;
-	private boolean levelThreeComplete = false;
 	
 	private Sprite background;
+	
+	//=====================================================
+	// METHODS
+	//=====================================================
 
 	@Override
 	public void createScene() {
@@ -51,6 +57,7 @@ public class LevelListScene extends BaseLevelScene implements IOnMenuItemClickLi
 		this.dispose();
 	}
 	
+	// This method creates the selection of levels available
 	public void createLevelList() {
 		// Background
 		this.background = new Sprite(0, 0, LevelListResourceManager.getLevelListResMan().levelListBackTR, vbom);
@@ -72,6 +79,7 @@ public class LevelListScene extends BaseLevelScene implements IOnMenuItemClickLi
 						
 		menuChild.buildAnimations();
 		menuChild.setBackgroundEnabled(false);
+		// Sets the position of the buttons
 		levelOneItem.setPosition(levelOneItem.getX(), levelOneItem.getY());
 		levelTwoItem.setPosition(levelTwoItem.getX(), levelTwoItem.getY() + 15);
 		levelThreeItem.setPosition(levelThreeItem.getX(), levelThreeItem.getY() + 30);
@@ -82,6 +90,7 @@ public class LevelListScene extends BaseLevelScene implements IOnMenuItemClickLi
 		setChildScene(menuChild);
 	}
 	
+	// This method uses the level selected to change to the selected level activity.
 	@Override
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 			float pMenuItemLocalX, float pMenuItemLocalY) {
@@ -104,34 +113,6 @@ public class LevelListScene extends BaseLevelScene implements IOnMenuItemClickLi
 			return true;
 		}
 		return false;
-	}
-	
-	//=========================================================
-	// GETTERS AND SETTERS
-	//=========================================================
-
-	public boolean isLevelOneComplete() {
-		return levelOneComplete;
-	}
-
-	public void setLevelOneComplete(boolean levelOneComplete) {
-		this.levelOneComplete = levelOneComplete;
-	}
-
-	public boolean isLevelTwoComplete() {
-		return levelTwoComplete;
-	}
-
-	public void setLevelTwoComplete(boolean levelTwoComplete) {
-		this.levelTwoComplete = levelTwoComplete;
-	}
-
-	public boolean isLevelThreeComplete() {
-		return levelThreeComplete;
-	}
-
-	public void setLevelThreeComplete(boolean levelThreeComplete) {
-		this.levelThreeComplete = levelThreeComplete;
 	}
 
 }

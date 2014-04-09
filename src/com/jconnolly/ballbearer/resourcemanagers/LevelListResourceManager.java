@@ -42,6 +42,24 @@ public class LevelListResourceManager {
 	public ITextureRegion levelThreeBtnTR;
 	public ITextureRegion levelFourBtnTR;
 	
+	// Loading Screen graphics
+	public BitmapTextureAtlas loadingTextureAtlas;
+	public ITextureRegion loadingTR;
+	
+	//====================================================
+	// METHODS
+	//====================================================
+	
+	public void loadLoadingResources() {
+		// Graphics
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.loadingTextureAtlas = new BitmapTextureAtlas(levelListActivity.getTextureManager(), 1024, 1024);
+		loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, levelListActivity,
+				"loadingText.png", 0, 0);
+		loadingTextureAtlas.load();
+		// Sounds
+	}
+	
 	public void loadLevelListResources() {
 		// Graphics
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -71,6 +89,11 @@ public class LevelListResourceManager {
 		levelTwoBtnTR = null;
 		levelThreeBtnTR = null;
 		levelFourBtnTR = null;
+	}
+	
+	public void unloadLoadingResources() {
+		loadingTextureAtlas.unload();
+		loadingTR = null;
 	}
 	
 	public static void prepareManager(Engine eng, Camera cam, VertexBufferObjectManager vbom, LevelListActivity levelListAct) {

@@ -35,7 +35,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.jconnolly.ballbearer.resourcemanagers.LevelThreeResourceManager;
 
+/*
+ * This class is the activity created for Level Three
+ */
 public class LevelThreeActivity extends BaseGameActivity implements SensorEventListener {
+	
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private static final int CAMERA_WIDTH = 800;
 	private static final int CAMERA_HEIGHT = 480;
@@ -47,7 +54,7 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
     private float tiltSpeedX;
     private float tiltSpeedY;
     
-    public boolean levelComplete = false;
+    private int score = 0;
 	
     private HUD gameHUD;
 	private Text scoreText;
@@ -57,7 +64,6 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 	private Sprite background;
 	private Sprite ball;
 	private Sprite ball2;
-	private Sprite finishPoint;
 	
 	// Obstacles
 	private Sprite block;
@@ -74,6 +80,10 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 	private Rectangle top;
 	private Rectangle right;
 	private Rectangle left;
+	
+	//=====================================================
+	// METHODS
+	//=====================================================
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -104,10 +114,12 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
+		// Creates background and level scene
 		background = new Sprite(0, 0, LevelThreeResourceManager.getLvlThreeResMan().levelBackTR, mEngine.getVertexBufferObjectManager());
 		level = new Scene();
 		level.setBackground(new SpriteBackground(background));
 		
+		// Sets up the sensor manager for the Accelerometer that is used to provide a tilt mechanism for the game
 		sensorManager = (SensorManager)this.getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
 		
@@ -119,22 +131,56 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 		pOnCreateSceneCallback.onCreateSceneFinished(level);
 	}
 
+	
+	// Populates the level with the game objects
 	@Override
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 		ball = new Sprite(200, 300, LevelThreeResourceManager.getLvlThreeResMan().ballTR, mEngine.getVertexBufferObjectManager());
 		ball2 = new Sprite(758, 438, LevelThreeResourceManager.getLvlThreeResMan().ball2TR, mEngine.getVertexBufferObjectManager());
-		finishPoint = new Sprite(10, 10, LevelThreeResourceManager.getLvlThreeResMan().finishTR, mEngine.getVertexBufferObjectManager());
 		
+		final Sprite finishPoint = new Sprite(10, 10, LevelThreeResourceManager.getLvlThreeResMan().finishTR,
+				mEngine.getVertexBufferObjectManager()) {
+			
+			// When the ball collides with the finish point the finish point removes itself
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+		};
+		// Disables rendering when the sprite is not visible *Performance*
+		finishPoint.setCullingEnabled(true);
+		this.level.attachChild(finishPoint);
+		
+		final Sprite finishPoint2 = new Sprite(300, 100, LevelThreeResourceManager.getLvlThreeResMan().finish2TR,
+				mEngine.getVertexBufferObjectManager()) {
+			
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball2.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+		};
+		finishPoint2.setCullingEnabled(true);
+		this.level.attachChild(finishPoint2);
+		
+		// Gives ball a physical density, elasticity and friction
 		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
-		final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
+		// Creates the physical body of the ball
 		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
 		Body ballBody2 = PhysicsFactory.createCircleBody(physicsWorld, ball2, BodyType.DynamicBody, BALL_FIX);
-		Body finishBody = PhysicsFactory.createCircleBody(physicsWorld, finishPoint, BodyType.StaticBody, FINISH_FIX);
 		this.level.attachChild(ball);
 		this.level.attachChild(ball2);
-		this.level.attachChild(finishPoint);
 		
 		this.level.registerUpdateHandler(new IUpdateHandler() {
 			
@@ -142,29 +188,31 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 			public void reset() {	}
 			
 			@Override
-			public void onUpdate(float pSecondsElapsed) {				
-				if(ball.collidesWith(finishPoint)) {
-					level.detachChild(ball);
-				} else if(ball2.collidesWith(finishPoint)) {
-					level.detachChild(ball2);
-				} else if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3)) {
+			public void onUpdate(float pSecondsElapsed) {
+				// Checks if ball hits trap
+				// If it does it exits the level
+				if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3)) {
 					System.exit(0);
 				} else if(ball2.collidesWith(trap) || ball2.collidesWith(trap2) || ball2.collidesWith(trap3)) {
+					System.exit(0);
+				} else if(score == 20) {
 					System.exit(0);
 				}
 			}
 		});
 		
+		// Creates a physical connector between the ball sprite and the physical body
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball, ballBody, true, false));
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball2, ballBody2, true, false));
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(finishPoint, finishBody, false, false));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
 	
 	private void createWalls() {
+		// Gives walls a physical presence
 		FixtureDef WALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
+		// Creates the walls
 		bottom = new Rectangle(0, CAMERA_HEIGHT-10, CAMERA_WIDTH, 10,	mEngine.getVertexBufferObjectManager());
 		top = new Rectangle(0, 0, CAMERA_WIDTH, 10,	mEngine.getVertexBufferObjectManager());
 		right = new Rectangle(CAMERA_WIDTH-10, 0, 10, CAMERA_HEIGHT, mEngine.getVertexBufferObjectManager());
@@ -186,11 +234,9 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 	}
 	
 	private void createObstacles() {
+		// Gives walls/ blocks and traps physical attributes
 		FixtureDef BLOCK_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		FixtureDef TRAP_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
-		
-		// int minX = 10, maxX = 758;
-		// int minY = 10, maxY = 438;
 		
 		block = new Sprite(400, 400, LevelThreeResourceManager.getLvlThreeResMan().wallTR, mEngine.getVertexBufferObjectManager());
 		block2 = new Sprite(700, 400, LevelThreeResourceManager.getLvlThreeResMan().wallTR, mEngine.getVertexBufferObjectManager());
@@ -235,6 +281,8 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 		// TODO Auto-generated method stub
 	}
 
+	// This method manages the change in speed of the ball objects when the device is tilted
+	// Tilt mechanism
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		tiltSpeedX = event.values[1];
@@ -244,6 +292,7 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 		Vector2Pool.recycle(gravity);
 	}
 	
+	// Creates Heads Up Display
 	private void createHUD() {
 		gameHUD = new HUD();		
 		
@@ -254,6 +303,12 @@ public class LevelThreeActivity extends BaseGameActivity implements SensorEventL
 		gameHUD.attachChild(scoreText);
 		
 		camera.setHUD(gameHUD);
+	}
+	
+	// Adds Score
+	private void addToScore(int i) {
+		score += i;
+		scoreText.setText("Score: " + score);
 	}
 
 }

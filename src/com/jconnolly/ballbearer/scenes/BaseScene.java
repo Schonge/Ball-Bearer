@@ -12,8 +12,9 @@ import com.jconnolly.ballbearer.activities.MenuActivity;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
 /*
- * An abstract class for a base scene that will be used
+ * An Abstract class for a base scene that will be used
  * by all scenes associated with the application's menu.
+ * These scenes will have to implement the methods provided.
  */
 public abstract class BaseScene extends Scene {
 	

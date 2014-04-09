@@ -8,11 +8,19 @@ import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 import com.jconnolly.ballbearer.scenes.BaseLevelScene;
 import com.jconnolly.ballbearer.scenes.LevelListScene;
 
+/*
+ * This class manages the scenes for the Level List
+ * It only consists of one scene 
+ */
 public class LevelListManger {
 
+	//====================================================
+	// VARIABLES
+	//====================================================
+	
 	private BaseLevelScene levelListMenu;
 	
-private static final LevelListManger LEVEL_LIST_MAN = new LevelListManger();
+	private static final LevelListManger LEVEL_LIST_MAN = new LevelListManger();
 	
 	private BaseLevelScene currentLevel;
 	private LevelType currentLevelType;
@@ -26,6 +34,7 @@ private static final LevelListManger LEVEL_LIST_MAN = new LevelListManger();
 	// METHODS
 	//====================================================
 	
+	// Creates the scene from the resources
 	public void createLevelList(OnCreateSceneCallback pOnCreateSceneCallback) {
 		LevelListResourceManager.getLevelListResMan().loadLevelListResources();
 		levelListMenu = new LevelListScene();
@@ -33,6 +42,7 @@ private static final LevelListManger LEVEL_LIST_MAN = new LevelListManger();
 		pOnCreateSceneCallback.onCreateSceneFinished(levelListMenu);
 	}
 	
+	// Disposes of the scene and unloads the resources
 	public void disposeLevelList() {
 		MenuResourceManager.getMenuResMan().unloadMenuResources();
 		levelListMenu.destroyScene();

@@ -16,14 +16,24 @@ import android.view.KeyEvent;
 import com.jconnolly.ballbearer.LevelListManger;
 import com.jconnolly.ballbearer.resourcemanagers.LevelListResourceManager;
 
+/*
+ * This class creates the activity for the list of levels
+ */
 public class LevelListActivity extends BaseGameActivity {
 
+	//=====================================================
+	// VARIABLES
+	//=====================================================
+	
 	private static final int CAMERA_WIDTH = 480;
 	private static final int CAMERA_HEIGHT = 800;
 	
 	
 	private Camera camera;
 	
+	//=====================================================
+	// METHODS
+	//=====================================================
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -79,6 +89,12 @@ public class LevelListActivity extends BaseGameActivity {
 		}
 		return false;
 	}
+	
+	//=====================================================
+	// LEVEL CHOICES
+	// These methods change the activities from the level list
+	// to the level selected
+	//=====================================================
 	
 	public void listToLevelOne() {
 		LevelListResourceManager.getLevelListResMan().unloadLevelListResources();

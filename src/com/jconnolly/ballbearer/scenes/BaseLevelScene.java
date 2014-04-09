@@ -11,11 +11,11 @@ import com.jconnolly.ballbearer.LevelListManger.LevelType;
 import com.jconnolly.ballbearer.activities.LevelListActivity;
 import com.jconnolly.ballbearer.resourcemanagers.LevelListResourceManager;
 
+/*
+ * This is an Abstract class in which methods to be used by the scene
+ * that will control the level list will have to implement.
+ */
 public abstract class BaseLevelScene extends Scene {
-	
-	//====================================================
-	// CONSTANTS
-	//====================================================
 	
 	//====================================================
 	// VARIABLES

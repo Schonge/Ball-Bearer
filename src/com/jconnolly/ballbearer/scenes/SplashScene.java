@@ -5,9 +5,21 @@ import org.andengine.entity.sprite.Sprite;
 import com.jconnolly.ballbearer.SceneManager.SceneType;
 import com.jconnolly.ballbearer.resourcemanagers.MenuResourceManager;
 
+/*
+ * This class creates the splash scene which is the scene that is shown when loading
+ * up the application. It can be used to show company logos etc.
+ */
 public class SplashScene extends BaseScene {
+
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private Sprite splash;
+	
+	//=====================================================
+	// METHODS
+	//=====================================================
 
 	@Override
 	public void createScene() {

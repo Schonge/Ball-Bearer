@@ -52,6 +52,8 @@ public class LevelTwoResourceManager {
 	public ITextureRegion ball2TR;
 	public ITextureRegion ball3TR;
 	public ITextureRegion finishTR;
+	public ITextureRegion finish2TR;
+	public ITextureRegion finish3TR;
 		
 	// Fonts
 	public Font simpFont;
@@ -98,6 +100,8 @@ public class LevelTwoResourceManager {
 		wallTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "blackWall.png");
 		trapHoleTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "trapHole.png");
 		finishTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "orangeGoal.png");
+		finish2TR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "redGoal.png");
+		finish3TR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, levelTwoAct, "blueGoal.png");
 		gameTextureAtlas.load();
 		
 		// Builds an area for holding and rendering textures

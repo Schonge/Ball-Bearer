@@ -38,10 +38,6 @@ public class LevelOneResourceManager {
 	public VertexBufferObjectManager vbom;
 	public LevelOneActivity levelOneAct;
 		
-	// Loading Screen graphics
-	public BitmapTextureAtlas loadingTextureAtlas;
-	public ITextureRegion loadingTR;
-		
 	// Game graphics
 	public BuildableBitmapTextureAtlas gameTextureAtlas;
 	public ITextureRegion levelBackTR;
@@ -64,16 +60,6 @@ public class LevelOneResourceManager {
 	//====================================================
 	// METHODS
 	//====================================================
-		
-	public void loadLoadingResources() {
-		// Graphics
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.loadingTextureAtlas = new BitmapTextureAtlas(levelOneAct.getTextureManager(), 1024, 1024);
-		loadingTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, levelOneAct,
-				"loadingText.png", 0, 0);
-		loadingTextureAtlas.load();
-		// Sounds
-	}
 		
 	public void loadGameResources() {
 		// Fonts
@@ -119,11 +105,6 @@ public class LevelOneResourceManager {
 				"levelComplete.png", 0, 0);
 		levelCompleteTextureAtlas.load();
 		// Sounds
-	}
-		
-	public void unloadLoadingResources() {
-		loadingTextureAtlas.unload();
-		loadingTR = null;
 	}
 		
 	public void unloadGameResources() {

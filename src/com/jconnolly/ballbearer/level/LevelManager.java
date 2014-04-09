@@ -17,7 +17,15 @@ import android.content.res.AssetManager;
 import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 import com.jconnolly.ballbearer.tiles.Tile;
 
+/*
+ * This class manages the levels that are created and loads
+ * them using XML
+ */
 public class LevelManager {
+	
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private final LevelLoader lvlLoader;
 	private final AssetManager assetMan;
@@ -28,8 +36,10 @@ public class LevelManager {
 	private static final String TAG_TILE_ATTR_X = "x";
 	private static final String TAG_TILE_ATTR_Y = "y";
 	private static final String TAG_TILE_ATTR_TILE = "tile";
-	//private static final String TAG_TILE = "tile";
 	
+	//=====================================================
+	// CONSTRUCTOR
+	//=====================================================
 	
 	public LevelManager(AssetManager assetMan) {
 		lvlLoader = new LevelLoader();
@@ -39,6 +49,11 @@ public class LevelManager {
 		addNewLevel(2, "example2.lvl");
 	}
 	
+	//=====================================================
+	// METHODS
+	//=====================================================
+	
+	// Adds a new level to the list of levels
 	private void addNewLevel(int id, String name) {
 		final Level lvl = new Level(id);
 		
@@ -78,6 +93,8 @@ public class LevelManager {
 		levels.add(lvl);
 	}
 	
+	
+	// Loads the level
 	public void loadLevel(int id, Scene scene, PhysicsWorld physicsWorld) {
 		for(Level level : levels) {
 			level.load(scene, physicsWorld);

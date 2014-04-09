@@ -35,7 +35,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.jconnolly.ballbearer.resourcemanagers.LevelOneResourceManager;
 
+/*
+ * This class is the activity created for Level One
+ */
 public class LevelOneActivity extends BaseGameActivity implements SensorEventListener {
+	
+	//=====================================================
+	// VARIABLES
+	//=====================================================
 	
 	private static final int CAMERA_WIDTH = 800;
 	private static final int CAMERA_HEIGHT = 480;
@@ -47,7 +54,7 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
     private float tiltSpeedX;
     private float tiltSpeedY;
     
-    public boolean levelComplete = false;
+    private int score = 0;
 	
     private HUD gameHUD;
 	private Text scoreText;
@@ -56,7 +63,6 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 	// Sprites
 	private Sprite background;
 	private Sprite ball;
-	private Sprite finishPoint;
 	
 	// Obstacles
 	private Sprite block;
@@ -73,6 +79,10 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 	private Rectangle top;
 	private Rectangle right;
 	private Rectangle left;
+	
+	//=====================================================
+	// METHODS
+	//=====================================================
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -122,15 +132,19 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 		ball = new Sprite(200, 300, LevelOneResourceManager.getLvlOneResMan().ballTR, mEngine.getVertexBufferObjectManager());
-		finishPoint = new Sprite(10, 10, LevelOneResourceManager.getLvlOneResMan().finishTR, mEngine.getVertexBufferObjectManager());
-		
-		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
-		final FixtureDef FINISH_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
-		
-		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
-		Body finishBody = PhysicsFactory.createCircleBody(physicsWorld, finishPoint, BodyType.StaticBody, FINISH_FIX);
-		this.level.attachChild(ball);
-		this.level.attachChild(finishPoint);
+		final Sprite finishPoint = new Sprite(10, 10, LevelOneResourceManager.getLvlOneResMan().finishTR, mEngine.getVertexBufferObjectManager()) {
+
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				if(ball.collidesWith(this)) {
+					this.setVisible(false);
+					addToScore(10);
+					setIgnoreUpdate(true);
+				}
+				super.onManagedUpdate(pSecondsElapsed);
+			}
+			
+		};
 		
 		this.level.registerUpdateHandler(new IUpdateHandler() {
 			
@@ -138,18 +152,24 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 			public void reset() {	}
 			
 			@Override
-			public void onUpdate(float pSecondsElapsed) {				
-				if(ball.collidesWith(finishPoint)) {
-					level.detachChild(ball);
+			public void onUpdate(float pSecondsElapsed) {
+				if(score == 10) {
 					System.exit(0);
 				} else if(ball.collidesWith(trap) || ball.collidesWith(trap2) || ball.collidesWith(trap3)) {
 					System.exit(0);
 				}
+				
 			}
 		});
 		
+		final FixtureDef BALL_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.4f, 0.0f);
+		
+		// Dynamic body means that the object can be influenced by gravity or the tilt mechanism
+		Body ballBody = PhysicsFactory.createCircleBody(physicsWorld, ball, BodyType.DynamicBody, BALL_FIX);
+		this.level.attachChild(ball);
+		this.level.attachChild(finishPoint);
+		
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(ball, ballBody, true, false));
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(finishPoint, finishBody, false, false));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
@@ -181,9 +201,6 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 		FixtureDef BLOCK_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		FixtureDef TRAP_FIX = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
 		
-		// int minX = 10, maxX = 758;
-		// int minY = 10, maxY = 438;
-		
 		block = new Sprite(400, 400, LevelOneResourceManager.getLvlOneResMan().wallTR, mEngine.getVertexBufferObjectManager());
 		block2 = new Sprite(700, 400, LevelOneResourceManager.getLvlOneResMan().wallTR, mEngine.getVertexBufferObjectManager());
 		block3 = new Sprite(600, 300, LevelOneResourceManager.getLvlOneResMan().wallTR, mEngine.getVertexBufferObjectManager());
@@ -194,6 +211,7 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 		trap2 = new Sprite(100, 350, LevelOneResourceManager.getLvlOneResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
 		trap3 = new Sprite(510, 240, LevelOneResourceManager.getLvlOneResMan().trapHoleTR, mEngine.getVertexBufferObjectManager());
 		
+		// StaticBody means that the objects won't move or be influenced by gravity/ tilt on screen
 		Body blockBody = PhysicsFactory.createBoxBody(physicsWorld, block, BodyType.StaticBody, BLOCK_FIX);
 		Body blockBody2 = PhysicsFactory.createBoxBody(physicsWorld, block2, BodyType.StaticBody, BLOCK_FIX);
 		Body blockBody3 = PhysicsFactory.createBoxBody(physicsWorld, block3, BodyType.StaticBody, BLOCK_FIX);
@@ -246,6 +264,11 @@ public class LevelOneActivity extends BaseGameActivity implements SensorEventLis
 		gameHUD.attachChild(scoreText);
 		
 		camera.setHUD(gameHUD);
+	}
+	
+	private void addToScore(int i) {
+		score += i;
+		scoreText.setText("Score: " + score);
 	}
 
 }

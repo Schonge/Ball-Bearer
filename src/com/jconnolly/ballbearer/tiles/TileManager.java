@@ -6,6 +6,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.jconnolly.ballbearer.resourcemanagers.LevelTwoResourceManager;
 
+/*
+ * This class manages all the tiles that are created
+ * and stores them in an array list
+ */
 public class TileManager {
 	
 	private ArrayList<Tile> tiles = new ArrayList<Tile>();
